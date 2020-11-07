@@ -22,4 +22,6 @@ test_that("does the right thing for problematic inputs", {
   expect_error(count_them(Inf))
   expect_error(count_them("a"))
   expect_error(count_them(list("a","b", 20)))
+  expect_warning(count_them(5.4999999999999999999999999999))
+  expect_error(count_them(-0.0000000000000000000000001))
 })

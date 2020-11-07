@@ -4,7 +4,25 @@ Die Funktion `lag()` (s.u.) gibt eine Version ihres Vektor-Inputs `x` zurück, d
 tut.  Schreiben Sie ein paar simple Testfälle um ihre Modifikationen zu überprüfen -- also für Listen-, Matrizen-, oder `data.frame`-förmige `x`, ungeeignete `lag`-Werte, ...
 ```{r, lag-baddef}
 lag <- function(x, n = 1L) {
+  checkmate::assert_atomic_vector(x, min.len = 1)
+  checkmate::assert_count(n)
+  checkmate::assert_count(length(x) - n)
+  
   xlen <- length(x)
+  
   c(rep(NA, n), x[seq_len(xlen - n)])
 }
+
+library(testthat)
+test_that("lag works", {
+  expect_error(lag(c(1, 2, 3), 4)) # --> korrekte Fehlermeldung
+  expect_identical(lag(c(1, 2, 3), 0), c(1, 2, 3)) # funktioniert
+  expect_identical(all(is.na(lag(c(1, 2, 3), 3))), TRUE) # funktioniert
+  expect_error(lag(c(1, 2, 3), -1)) # --> korrekte Fehlermeldung
+  expect_error(lag(diag(1, 4, 4), 1)) # --> korrekte Fehlermeldung
+  expect_error(lag(diag(1, 1, 1), 1)) # --> korrekte Fehlermeldung
+  expect_error(lag(data.frame(c(1, 1, 1), c(4, 5, 6)))) # --> korrekte Fehlermeldung
+  expect_error(lag(list(1, 2, 3), 2)) # --> korrekte Fehlermeldung
+})
+
 ```
