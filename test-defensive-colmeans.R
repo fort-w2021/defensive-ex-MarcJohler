@@ -55,6 +55,7 @@ test_that("deals with missings", {
                col_means(mtcars)[, -1])
 })
 
+
 test_that("deals with factors, characters", {
   mtcars_chr <- mtcars
   mtcars_chr[-1] <- lapply(mtcars_chr[-1], as.character)

@@ -18,6 +18,7 @@ count_them <- function(supposedly_a_count) {
     supposedly_a_count <- round(supposedly_a_count)
   }
   
+  #if result is not of type integer, transform into integer
   if (!checkmate::test_integer(supposedly_a_count,len=1)) {
     supposedly_a_count <- as.integer(supposedly_a_count)
   }

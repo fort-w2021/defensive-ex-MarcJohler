@@ -9,10 +9,46 @@ funktionieren oder zumindest hilfreiche Fehlermeldungen erzeugen. Benutzen Sie k
 ```{r, col_means_exdef, eval=FALSE}
 # compute means of all numeric columns in df
 # output: a data.frame
-col_means <- function(df) {
-  numeric <- vapply(df, is.numeric, logical(1))
-  numeric_cols <- df[, numeric]
+col_means <- function(df, na.rm = FALSE) {
+  #the input 'df' must have one of the following formats:
+  checkmate::assert(
+    checkmate::check_data_frame(df),
+    checkmate::check_numeric(df, min.len = 1),
+    checkmate::check_matrix(df),
+    checkmate::check_list(df, min.len = 1),
+    checkmate::check_flag(na.rm)
+  )
+  #if the input is a vector simply compute the mean
+  #if it's no vector and not data.frame transform it to a data.frame
+  if (is.vector(df) && is.atomic(df)) {
+    return(mean(df, na.rm = na.rm))
+  }
+  else if (!is.data.frame(df)) {
+    df <- as.data.frame(df)
+  }
 
-  data.frame(lapply(numeric_cols, mean))
+  #detect the numerical columns
+  numeric <- vapply(df, is.numeric, logical(1))
+  numeric_cols <- df[, numeric, drop = FALSE]
+  
+  #if there are either no valid columns or no valid rows, return an empty data.frame
+  if (ncol(numeric_cols) == 0){
+    warning("There are no valid columns in the input")
+    return(data.frame())
+  }
+  if (nrow(numeric_cols) == 0){
+    warning("There are no valid rows in the input")
+    return(data.frame())
+  }
+ 
+  #if there is only one column, computation is a little different
+  if (ncol(numeric_cols) == 1) {
+    output <- data.frame(dummy=mean(numeric_cols[, 1], na.rm = na.rm))
+    names(output) <- names(numeric_cols)
+    return(output)
+  }
+  
+  # in any other case use the original approach of this function
+  return(data.frame(lapply(numeric_cols, mean, na.rm = na.rm)))
 }
 ```
