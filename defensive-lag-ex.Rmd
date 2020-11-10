@@ -18,14 +18,14 @@ lag <- function(x, n = 1L) {
 
 library(testthat)
 test_that("lag works", {
-  expect_error(lag(c(1, 2, 3), 4)) # --> korrekte Fehlermeldung
-  expect_identical(lag(c(1, 2, 3), 0), c(1, 2, 3)) # funktioniert
-  expect_identical(all(is.na(lag(c(1, 2, 3), 3))), TRUE) # funktioniert
-  expect_error(lag(c(1, 2, 3), -1)) # --> korrekte Fehlermeldung
-  expect_error(lag(diag(1, 4, 4), 1)) # --> korrekte Fehlermeldung
-  expect_error(lag(diag(1, 1, 1), 1)) # --> korrekte Fehlermeldung
-  expect_error(lag(data.frame(c(1, 1, 1), c(4, 5, 6)))) # --> korrekte Fehlermeldung
-  expect_error(lag(list(1, 2, 3), 2)) # --> korrekte Fehlermeldung
+  expect_error(lag(c(1, 2, 3), 4)) 
+  expect_identical(lag(c(1, 2, 3), 0), c(1, 2, 3)) 
+  expect_identical(all(is.na(lag(c(1, 2, 3), 3))), TRUE) 
+  expect_error(lag(c(1, 2, 3), -1)) 
+  expect_error(lag(diag(1, 4, 4), 1)) 
+  expect_error(lag(diag(1, 1, 1), 1)) 
+  expect_error(lag(data.frame(c(1, 1, 1), c(4, 5, 6)))) 
+  expect_error(lag(list(1, 2, 3), 2)) 
 })
 
 ```
